@@ -76,7 +76,7 @@
             font-weight: bold;
         }
         
-        input[type="text"], input[type="email"], input[type="date"] {
+        input[type="text"], input[type="email"], input[type="date"], select {
             border: none;
             border-bottom: 1px solid #333;
             padding: 2px 5px;
@@ -85,10 +85,38 @@
             min-width: 150px;
         }
         
-        input[type="text"]:focus, input[type="email"]:focus, input[type="date"]:focus {
+        input[type="text"]:focus, input[type="email"]:focus, input[type="date"]:focus, select:focus {
             outline: none;
             background: #fff9e6;
             border-bottom: 2px solid #007bff;
+        }
+        
+        /* Estilo específico para selects en impresión */
+        @media print {
+            select {
+                -webkit-appearance: none;
+                -moz-appearance: none;
+                appearance: none;
+                border: none !important;
+                border-bottom: 1px solid #000 !important;
+                background: transparent !important;
+            }
+        }
+        
+        /* Campos que se auto-ajustan al contenido */
+        .auto-width {
+            width: auto;
+            min-width: 200px;
+            max-width: 100%;
+            display: inline-block;
+        }
+        
+        /* Estilo específico para el campo de firma */
+        #volunteer-name-signature {
+            text-align: center;
+            font-weight: bold;
+            width: 100%;
+            min-width: 300px;
         }
         
         .signature-section {
@@ -220,7 +248,7 @@
     <div class="container">
         <h1>CONVENIO DE COLABORACIÓN PARA LA PRESTACIÓN DE SERVICIOS VOLUNTARIOS</h1>
         
-        <p class="bold">QUE CELEBRAN POR UNA PARTE LA PERSONA MORAL INNOVACIONES MADFAM, SOCIEDAD ANÓNIMA SIMPLIFICADA DE CAPITAL VARIABLE, EN ESTE ACTO REPRESENTADA POR SU ADMINISTRADOR ÚNICO EL C. ALDO RUIZ LUNA, QUE EN LO SUCESIVO SE LE DENOMINARÁ "MADFAM" Y POR OTRA PARTE LA PERSONA FÍSICA C. <input type="text" id="volunteer-name" class="field-medium" value="NURI ARANZAZÚ HERNÁNDEZ SANTOS">, QUE EN LO SUCESIVO SE LE DENOMINARÁ "LA VOLUNTARIA", MISMOS QUE CUANDO SE EXPRESEN DE MANERA CONJUNTA SE LES DENOMINARÁ "LAS PARTES", ES POR ELLO QUE SE MANIFIESTAN AL TENOR LAS SIGUIENTES:</p>
+        <p class="bold">QUE CELEBRAN POR UNA PARTE LA PERSONA MORAL INNOVACIONES MADFAM, SOCIEDAD ANÓNIMA SIMPLIFICADA DE CAPITAL VARIABLE, EN ESTE ACTO REPRESENTADA POR SU ADMINISTRADOR ÚNICO EL C. ALDO RUIZ LUNA, QUE EN LO SUCESIVO SE LE DENOMINARÁ "MADFAM" Y POR OTRA PARTE LA PERSONA FÍSICA C. <input type="text" id="volunteer-name" class="auto-width" value="NURI ARANZAZÚ HERNÁNDEZ SANTOS" style="font-weight: bold;">, QUE EN LO SUCESIVO SE LE DENOMINARÁ "LA VOLUNTARIA", MISMOS QUE CUANDO SE EXPRESEN DE MANERA CONJUNTA SE LES DENOMINARÁ "LAS PARTES", ES POR ELLO QUE SE MANIFIESTAN AL TENOR LAS SIGUIENTES:</p>
         
         <h2>DECLARACIONES</h2>
         
@@ -245,7 +273,7 @@
         <h3>II.- Declara "LA VOLUNTARIA"</h3>
         
         <div class="clause">
-            <p>a) Declara la persona física la C. <input type="text" id="volunteer-name-declaration" class="field-medium" value="NURI ARANZAZÚ HERNÁNDEZ SANTOS">, ser mexicana, mayor de edad y por propio derecho para suscribir el presente convenio.</p>
+            <p>a) Declara la persona física la C. <input type="text" id="volunteer-name-declaration" class="auto-width" value="NURI ARANZAZÚ HERNÁNDEZ SANTOS">, ser mexicana, mayor de edad y por propio derecho para suscribir el presente convenio.</p>
             
             <p>b) Cuenta con los elementos, conocimientos propios y suficientes para ofrecer los servicios voluntarios a favor de "MADFAM" en los términos del presente.</p>
             
@@ -367,7 +395,20 @@
         
         <p style="text-align: center; margin-top: 30px;"><strong>** Fin de cláusulas **</strong></p>
         
-        <p>Leído por ambas partes y habiendo quedado enterada de su contenido y alcance legal; manifestando ambas su capacidad legal para contratar, dicho convenio lo firman por duplicado en la Ciudad de Cuernavaca, Morelos el día <input type="text" style="width: 30px;" id="day-field"> de <input type="text" style="width: 100px;" id="month-field"> de 2025.</p>
+        <p>Leído por ambas partes y habiendo quedado enterada de su contenido y alcance legal; manifestando ambas su capacidad legal para contratar, dicho convenio lo firman por duplicado en la Ciudad de Cuernavaca, Morelos el día <input type="text" style="width: 30px;" id="day-field"> de <select id="month-field" style="border: none; border-bottom: 1px solid #333; padding: 2px 5px; font-size: 15px; background: #fffef0; min-width: 100px;">
+            <option value="enero">enero</option>
+            <option value="febrero">febrero</option>
+            <option value="marzo">marzo</option>
+            <option value="abril">abril</option>
+            <option value="mayo">mayo</option>
+            <option value="junio">junio</option>
+            <option value="julio">julio</option>
+            <option value="agosto">agosto</option>
+            <option value="septiembre">septiembre</option>
+            <option value="octubre">octubre</option>
+            <option value="noviembre">noviembre</option>
+            <option value="diciembre">diciembre</option>
+        </select> de 2025.</p>
         
         <div class="signature-section">
             <div class="signature-box">
@@ -419,8 +460,8 @@
         function saveToMemory(silent = false) {
             const formData = {};
             
-            // Recopilar todos los valores de los campos
-            const inputs = document.querySelectorAll('input[type="text"], input[type="email"], input[type="date"]');
+            // Recopilar todos los valores de los campos (incluyendo selects)
+            const inputs = document.querySelectorAll('input[type="text"], input[type="email"], input[type="date"], select');
             inputs.forEach((input, index) => {
                 if (input.id) {
                     formData[input.id] = input.value;
@@ -515,7 +556,7 @@
             }
             
             const { data, timestamp } = draftData;
-            const inputs = document.querySelectorAll('input[type="text"], input[type="email"], input[type="date"]');
+            const inputs = document.querySelectorAll('input[type="text"], input[type="email"], input[type="date"], select');
             
             // Restaurar valores
             inputs.forEach((input, index) => {
@@ -566,9 +607,47 @@
                 dayField.value = today.getDate();
             }
             
-            if (monthField && !monthField.value) {
-                monthField.value = months[today.getMonth()];
+            if (monthField) {
+                // Obtener el mes actual (0-11) y seleccionar la opción correspondiente
+                const currentMonth = months[today.getMonth()];
+                monthField.value = currentMonth;
             }
+            
+            // Función para ajustar el ancho de los inputs según su contenido
+            function adjustInputWidth(input) {
+                // Crear un elemento temporal para medir el texto
+                const tmp = document.createElement('span');
+                tmp.style.font = window.getComputedStyle(input).font;
+                tmp.style.padding = window.getComputedStyle(input).padding;
+                tmp.style.visibility = 'hidden';
+                tmp.style.position = 'absolute';
+                tmp.style.whiteSpace = 'pre';
+                tmp.textContent = input.value || input.placeholder || '';
+                document.body.appendChild(tmp);
+                
+                // Ajustar el ancho con un margen extra
+                const newWidth = tmp.offsetWidth + 30;
+                input.style.width = newWidth + 'px';
+                
+                document.body.removeChild(tmp);
+            }
+            
+            // Aplicar ajuste automático a todos los campos con clase auto-width
+            const autoWidthInputs = document.querySelectorAll('.auto-width');
+            autoWidthInputs.forEach(input => {
+                // Ajustar al cargar
+                adjustInputWidth(input);
+                
+                // Ajustar mientras se escribe
+                input.addEventListener('input', function() {
+                    adjustInputWidth(this);
+                });
+                
+                // Ajustar al cambiar
+                input.addEventListener('change', function() {
+                    adjustInputWidth(this);
+                });
+            });
             
             // Sincronizar los campos del nombre de la voluntaria
             const volunteerFields = ['volunteer-name', 'volunteer-name-declaration', 'volunteer-name-signature'];
@@ -582,6 +661,10 @@
                             const otherField = document.getElementById(otherId);
                             if (otherField && otherId !== fieldId) {
                                 otherField.value = this.value;
+                                // Ajustar el ancho del campo sincronizado
+                                if (otherField.classList.contains('auto-width')) {
+                                    adjustInputWidth(otherField);
+                                }
                             }
                         });
                     });
